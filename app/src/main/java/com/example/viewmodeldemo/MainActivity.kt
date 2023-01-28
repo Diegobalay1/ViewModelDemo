@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.viewmodeldemo.ui.theme.ViewModelDemoTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,19 +31,48 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenSetup() {
-    MainScreen()
+fun ScreenSetup(viewModel: DemoViewModel = viewModel()) {
+    MainScreen(
+        isFahrenheit = viewModel.isFahrenheit,
+        result = viewModel.result,
+        convertTemp = { viewModel.convertTemp(it) },
+        switchChange = { viewModel.switchChange() }
+    )
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    isFahrenheit: Boolean,
+    result: String,
+    convertTemp: (String) -> Unit,
+    switchChange: () -> Unit
+) {
 
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DefaultPreview() {
+fun DefaultPreview(model: DemoViewModel = viewModel()) {
     ViewModelDemoTheme {
-        ScreenSetup()
+        MainScreen(
+            isFahrenheit = model.isFahrenheit,
+            result = model.result,
+            convertTemp = {
+                model.convertTemp(it)
+        }, switchChange = {model.switchChange()}
+        )
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
