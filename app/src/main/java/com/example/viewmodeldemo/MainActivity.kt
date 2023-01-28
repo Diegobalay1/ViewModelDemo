@@ -24,6 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +63,38 @@ fun MainScreen(
     convertTemp: (String) -> Unit,
     switchChange: () -> Unit
 ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()) {
 
+        var textState by remember { mutableStateOf("") }
+        val onTextChange = { text: String ->
+            textState = text
+        }
+
+        Text(
+            text = "Temperature Converter",
+            modifier = Modifier.padding(20.dp),
+            style = MaterialTheme.typography.h4
+        )
+
+        InputRow(
+            isFahrenheit = isFahrenheit,
+            textState = textState,
+            //switchChange = { switchChange() },
+            switchChange =  switchChange,
+            onTextChange = onTextChange
+        )
+
+        Text(
+            text = result,
+            modifier = Modifier.padding(20.dp),
+            style = MaterialTheme.typography.h3
+        )
+
+        Button(onClick = { convertTemp(textState) }) {
+            Text(text = "Convert Temperature")
+        }
+    }
 }
 
 @Composable
